@@ -172,35 +172,67 @@ export interface Survey {
 }
 
 // ── Catalog ────────────────────────────────────────────────────────────────
+export interface CatalogService {
+  id: string;
+  name: string;
+  description?: string | null;
+  status: "ACTIVE" | "INACTIVE";
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface Category {
   id: string;
   name: string;
-  description?: string;
-}
-
-export interface Service {
-  id: string;
-  name: string;
-  description?: string;
-  categoryId?: string;
+  status: "ACTIVE" | "INACTIVE";
+  service?: Pick<CatalogService, "id" | "name"> | null;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Product {
   id: string;
   name: string;
-  description?: string;
-  serviceId?: string;
-  billingType: BillingType;
+  description?: string | null;
+  unit: string;
+  status: "ACTIVE" | "INACTIVE";
+  category?: {
+    id: string;
+    name: string;
+    service?: Pick<CatalogService, "id" | "name"> | null;
+  } | null;
+  createdAt: string;
+  updatedAt: string;
 }
 
-export interface Price {
+export type BillingType = "MONTHLY" | "QUARTERLY" | "YEARLY" | "ONE_TIME";
+
+export interface ProductPrice {
   id: string;
   productId: string;
+  regularPrice: number;
   sellingPrice: number;
   minimumPrice: number;
-  effectiveFrom: string;
-  effectiveTo?: string;
+  billingType: BillingType;
+  effectiveDate: string;
+  status: "ACTIVE" | "INACTIVE";
+  createdBy?: Pick<User, "id" | "name" | "email"> | null;
+  createdAt: string;
+  updatedAt: string;
 }
+
+export interface PriceHistory {
+  id: string;
+  productPriceId: string;
+  oldPrice: number;
+  newPrice: number;
+  changedAt: string;
+  changedBy?: Pick<User, "id" | "name" | "email"> | null;
+}
+
+// Keep backward compat alias
+export type Service = CatalogService;
+export type Price = ProductPrice;
 
 // ── Quotation ──────────────────────────────────────────────────────────────
 export interface QuotationItem {
