@@ -1,28 +1,38 @@
+"use client";
+
+import Sidebar from "@/components/layout/Sidebar";
+import TopBar from "@/components/layout/TopBar";
+import AuthGuard from "@/components/features/auth/AuthGuard";
+
+/**
+ * Dashboard layout — wraps all protected routes.
+ *
+ * Structure:
+ *   AuthGuard           → redirects to /login if no user in store
+ *     ├── Sidebar       → collapsible nav rail (desktop) + slide Sheet (mobile)
+ *     └── main area
+ *           ├── TopBar  → user avatar, role badge, logout dropdown
+ *           └── <main>  → page content
+ */
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen bg-slate-50 dark:bg-slate-950">
-      <aside className="hidden w-64 border-r border-slate-200 bg-white p-4 text-slate-900 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-50 lg:block">
-        <div className="text-sm font-semibold text-slate-500 dark:text-slate-400">
-          Sidebar
+    <AuthGuard>
+      <div className="flex h-screen overflow-hidden bg-slate-50 dark:bg-slate-950">
+        {/* Sidebar — hidden on mobile (Sheet handles that), visible on lg+ */}
+        <Sidebar />
+
+        {/* Main column */}
+        <div className="flex flex-1 flex-col overflow-hidden">
+          <TopBar />
+          <main className="flex-1 overflow-y-auto">
+            {children}
+          </main>
         </div>
-        <div className="mt-4 text-xs text-slate-500 dark:text-slate-400">
-          (Step 9)
-        </div>
-      </aside>
-      <div className="flex flex-1 flex-col overflow-hidden">
-        <header className="h-14 border-b border-slate-200 bg-white px-6 text-slate-900 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-50">
-          <div className="flex h-full items-center justify-between">
-            <span className="text-sm font-semibold text-slate-500 dark:text-slate-400">
-              TopBar (Step 9)
-            </span>
-          </div>
-        </header>
-        <main className="flex-1 overflow-y-auto">{children}</main>
       </div>
-    </div>
+    </AuthGuard>
   );
 }
