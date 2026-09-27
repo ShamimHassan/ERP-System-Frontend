@@ -79,15 +79,20 @@ export interface Lead {
 // ── Customer ───────────────────────────────────────────────────────────────
 export interface Customer {
   id: string;
-  name: string;
-  company: string;
+  customerType: CustomerType;
+  companyName?: string | null;
+  contactPerson: string;
   phone: string;
-  email?: string;
-  type: CustomerType;
-  address?: string;
-  notes?: string;
-  marketingPersonId?: string;
+  email?: string | null;
+  address?: string | null;
+  billingAddress?: string | null;
+  taxVatNo?: string | null;
+  status: "ACTIVE" | "INACTIVE";
+  convertedFromLeadId?: string | null;
   managerId?: string;
+  manager?: Pick<User, "id" | "name" | "email">;
+  marketingPersonId?: string;
+  marketingPerson?: Pick<User, "id" | "name" | "email">;
   createdAt: string;
   updatedAt: string;
 }

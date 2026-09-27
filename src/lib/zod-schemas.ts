@@ -62,13 +62,15 @@ export const updateLeadSchema = createLeadSchema.partial().extend({
 
 // ── Customer ──────────────────────────────────────────────────────────────
 export const createCustomerSchema = z.object({
-  name:              z.string().min(1, "Name is required").max(200),
-  company:           z.string().min(1, "Company is required").max(200),
+  customerType:      z.enum(CUSTOMER_TYPES, { required_error: "Select customer type" }),
+  companyName:       z.string().max(200).optional().or(z.literal("")),
+  contactPerson:     z.string().min(1, "Contact person is required").max(200),
   phone:             z.string().min(1, "Phone is required").max(30),
   email:             z.string().email("Enter a valid email").optional().or(z.literal("")),
-  type:              z.enum(CUSTOMER_TYPES, { required_error: "Select customer type" }),
-  address:           z.string().max(500).optional(),
-  notes:             z.string().max(2000).optional(),
+  address:           z.string().max(500).optional().or(z.literal("")),
+  billingAddress:    z.string().max(500).optional().or(z.literal("")),
+  taxVatNo:          z.string().max(50).optional().or(z.literal("")),
+  status:            z.enum(["ACTIVE", "INACTIVE"] as const).default("ACTIVE"),
   managerId:         z.string().uuid().optional(),
   marketingPersonId: z.string().uuid().optional(),
 });
