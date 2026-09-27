@@ -1,0 +1,296 @@
+// api.types.ts — all backend response types.
+// Expanded further in Step 7.
+
+import type {
+  LeadStatus, LeadSource, Priority,
+  QuotationStatus, OrderStatus, OpportunityStage,
+  SurveyStatus, ActivityType, CustomerType, BillingType,
+  Metric, PeriodType, AuditModule, AuditAction,
+} from "./enums";
+
+// ── Standard envelope ──────────────────────────────────────────────────────
+export interface ApiSuccess<T> {
+  success: true;
+  data: T;
+  meta?: PaginationMeta;
+}
+
+export interface ApiError {
+  success: false;
+  error: {
+    code: string;
+    message: string;
+    details?: Array<{ field: string; message: string }>;
+  };
+}
+
+export interface PaginationMeta {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+}
+
+// ── Auth ───────────────────────────────────────────────────────────────────
+export type Role = "ADMIN" | "MANAGER" | "MARKETING";
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: Role;
+  managerId: string | null;
+}
+
+export interface AuthResponse {
+  user: User;
+  accessToken: string;
+  refreshToken: string;
+}
+
+// ── Lead ───────────────────────────────────────────────────────────────────
+export interface Lead {
+  id: string;
+  leadName: string;
+  companyName: string;
+  phone: string;
+  email?: string;
+  leadSource: LeadSource;
+  priority: Priority;
+  status: LeadStatus;
+  estimatedValue?: number;
+  nextFollowUp?: string;
+  notes?: string;
+  managerId?: string;
+  marketingPersonId?: string;
+  marketingPerson?: Pick<User, "id" | "name">;
+  manager?: Pick<User, "id" | "name">;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// ── Customer ───────────────────────────────────────────────────────────────
+export interface Customer {
+  id: string;
+  name: string;
+  company: string;
+  phone: string;
+  email?: string;
+  type: CustomerType;
+  address?: string;
+  notes?: string;
+  marketingPersonId?: string;
+  managerId?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// ── Opportunity ────────────────────────────────────────────────────────────
+export interface Opportunity {
+  id: string;
+  title: string;
+  customerId: string;
+  customer?: Pick<Customer, "id" | "name">;
+  stage: OpportunityStage;
+  value?: number;
+  probability?: number;
+  expectedCloseDate?: string;
+  notes?: string;
+  marketingPersonId?: string;
+  managerId?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// ── Activity ───────────────────────────────────────────────────────────────
+export interface Activity {
+  id: string;
+  type: ActivityType;
+  subject: string;
+  description?: string;
+  scheduledAt?: string;
+  completedAt?: string;
+  leadId?: string;
+  customerId?: string;
+  opportunityId?: string;
+  marketingPersonId?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// ── Survey ─────────────────────────────────────────────────────────────────
+export interface Survey {
+  id: string;
+  title: string;
+  status: SurveyStatus;
+  customerId?: string;
+  opportunityId?: string;
+  surveyDate?: string;
+  notes?: string;
+  assignedPersonId?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// ── Catalog ────────────────────────────────────────────────────────────────
+export interface Category {
+  id: string;
+  name: string;
+  description?: string;
+}
+
+export interface Service {
+  id: string;
+  name: string;
+  description?: string;
+  categoryId?: string;
+}
+
+export interface Product {
+  id: string;
+  name: string;
+  description?: string;
+  serviceId?: string;
+  billingType: BillingType;
+}
+
+export interface Price {
+  id: string;
+  productId: string;
+  sellingPrice: number;
+  minimumPrice: number;
+  effectiveFrom: string;
+  effectiveTo?: string;
+}
+
+// ── Quotation ──────────────────────────────────────────────────────────────
+export interface QuotationItem {
+  id: string;
+  productId: string;
+  product?: Pick<Product, "id" | "name">;
+  unitPrice: number;
+  quantity: number;
+  discount: number;
+  tax: number;
+  lineTotal: number;
+}
+
+export interface Quotation {
+  id: string;
+  quotationNumber: string;
+  customerId: string;
+  customer?: Pick<Customer, "id" | "name">;
+  opportunityId?: string;
+  status: QuotationStatus;
+  date: string;
+  expiryDate?: string;
+  paymentTerms?: string;
+  notes?: string;
+  subtotal: number;
+  discountTotal: number;
+  taxTotal: number;
+  grandTotal: number;
+  items: QuotationItem[];
+  marketingPersonId?: string;
+  managerId?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// ── Order ──────────────────────────────────────────────────────────────────
+export interface Order {
+  id: string;
+  orderNumber: string;
+  customerId: string;
+  customer?: Pick<Customer, "id" | "name">;
+  quotationId?: string;
+  status: OrderStatus;
+  grandTotal: number;
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// ── KPI ────────────────────────────────────────────────────────────────────
+export interface KpiRow {
+  userId: string;
+  userName: string;
+  periodType: PeriodType;
+  periodStart: string;
+  periodEnd: string;
+  metric: Metric;
+  targetValue: number;
+  actualValue: number;
+  achievementPct: number;
+}
+
+// ── Audit Log ──────────────────────────────────────────────────────────────
+export interface AuditLog {
+  id: string;
+  createdAt: string;
+  ipAddress?: string;
+  actor: Pick<User, "id" | "name" | "email" | "role">;
+  module: AuditModule;
+  action: AuditAction;
+  entityId: string;
+  entityLabel: string;
+  summary: string;
+  details: {
+    old: Record<string, unknown>;
+    new: Record<string, unknown>;
+    changed?: Array<{ field: string; old: unknown; new: unknown }>;
+  };
+  relatedUser?: Pick<User, "id" | "name" | "role">;
+}
+
+// ── Dashboard ──────────────────────────────────────────────────────────────
+export interface DashboardSummary {
+  role: Role;
+  counts: {
+    leads: number;
+    customers: number;
+    opportunities: number;
+    quotations: number;
+    quotationsApproved: number;
+    orders: number;
+    ordersCompleted: number;
+  };
+  revenueYtd: number;
+  collectionYtd: number;
+  conversionRate: number;
+  upcomingActivities: Activity[];
+  myTarget?: number;
+  myAchievement?: number;
+  teamAggs?: {
+    totalRevenue: number;
+    totalLeads: number;
+    topPerformers: User[];
+  };
+}
+
+export interface MemberRow {
+  userId: string;
+  userName: string;
+  userEmail: string;
+  role: Role;
+  leads: number;
+  opportunities: number;
+  quotationsApproved: number;
+  ordersCompleted: number;
+  newCustomers: number;
+  revenueYtd: number;
+  target: number;
+  achievementPct: number;
+  conversionRate: number;
+}
+
+export interface TeamPerformance {
+  grouped: boolean;
+  rows?: MemberRow[];
+  managerGroups?: Array<{
+    managerId: string;
+    managerName: string;
+    members: MemberRow[];
+  }>;
+  orphanMembers?: MemberRow[];
+}
