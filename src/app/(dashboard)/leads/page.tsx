@@ -1,8 +1,12 @@
-﻿export default function Page() {
-  const title = "leads";
+﻿import { Suspense } from "react";
+import LeadList from "@/components/features/leads/LeadList";
+import SkeletonList from "@/components/shared/SkeletonList";
+
+export default function LeadsPage() {
   return (
-    <main className="p-8">
-      <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-50">leads</h1>
-    </main>
+    // Suspense needed for useSearchParams inside LeadList
+    <Suspense fallback={<div className="p-6"><SkeletonList rows={8} /></div>}>
+      <LeadList />
+    </Suspense>
   );
 }

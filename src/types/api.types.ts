@@ -55,9 +55,16 @@ export interface Lead {
   companyName: string;
   phone: string;
   email?: string;
+  address?: string;
   leadSource: LeadSource;
   priority: Priority;
   status: LeadStatus;
+  serviceId?: string;
+  service?: Pick<Service, "id" | "name">;
+  categoryId?: string;
+  category?: Pick<Category, "id" | "name">;
+  productId?: string;
+  product?: Pick<Product, "id" | "name">;
   estimatedValue?: number;
   nextFollowUp?: string;
   notes?: string;
