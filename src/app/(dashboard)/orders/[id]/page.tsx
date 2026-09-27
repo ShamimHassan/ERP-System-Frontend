@@ -1,10 +1,7 @@
-export default function OrderDetailPage({ params }: { params: { id: string } }) {
-  return (
-    <main className="p-8">
-      <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
-        Order Detail
-      </h1>
-      <p className="mt-2 text-sm text-slate-500">ID: {params.id}</p>
-    </main>
-  );
+import { Suspense } from "react";
+import OrderDetail from "@/components/features/orders/OrderDetail";
+import SkeletonList from "@/components/shared/SkeletonList";
+interface Props { params: { id: string } }
+export default function OrderDetailPage({ params }: Props) {
+  return <Suspense fallback={<div className="p-6"><SkeletonList rows={8} /></div>}><OrderDetail id={params.id} /></Suspense>;
 }

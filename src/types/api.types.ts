@@ -271,15 +271,37 @@ export interface Quotation {
 }
 
 // ── Order ──────────────────────────────────────────────────────────────────
+export interface OrderItem {
+  id: string;
+  productId: string;
+  product?: { id: string; name: string; unit: string } | null;
+  quantity: number;
+  unitPrice: number;
+  discount: number;
+  tax: number;
+  lineTotal: number;
+}
+
 export interface Order {
   id: string;
   orderNumber: string;
   customerId: string;
-  customer?: Pick<Customer, "id" | "name">;
-  quotationId?: string;
+  customer?: { id: string; companyName?: string | null; contactPerson: string; phone: string; email?: string | null } | null;
+  quotationId?: string | null;
+  quotation?: { id: string; quotationNumber: string; status: string } | null;
   status: OrderStatus;
+  orderDate: string;
+  expectedActivationDate?: string | null;
+  paymentTerms?: string | null;
+  discountTotal: number;
+  taxTotal: number;
   grandTotal: number;
-  notes?: string;
+  items: OrderItem[];
+  invoice?: { id: string; invoiceNumber: string; amount: number; status: string; issuedAt: string; paidAt?: string | null } | null;
+  managerId?: string;
+  manager?: Pick<User, "id" | "name" | "email"> | null;
+  marketingPersonId?: string;
+  marketingPerson?: Pick<User, "id" | "name" | "email"> | null;
   createdAt: string;
   updatedAt: string;
 }
