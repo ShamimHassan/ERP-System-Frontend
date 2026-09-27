@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import QueryProvider from "@/components/providers/QueryProvider";
+import AuthProvider from "@/components/providers/AuthProvider";
 import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
@@ -30,8 +31,18 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        {/*
+          Provider order matters:
+          1. QueryProvider   — must wrap everything that uses useQuery / useMutation
+          2. AuthProvider    — calls GET /auth/me on mount (needs QueryProvider's axios instance);
+                               renders a neutral spinner until auth check resolves to prevent
+                               hydration mismatch between SSR (no localStorage) and client.
+          3. Toaster         — global toast notifications (sonner), always mounted
+        */}
         <QueryProvider>
-          {children}
+          <AuthProvider>
+            {children}
+          </AuthProvider>
           <Toaster richColors position="top-right" />
         </QueryProvider>
       </body>
