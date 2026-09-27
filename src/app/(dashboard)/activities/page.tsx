@@ -1,8 +1,6 @@
-﻿export default function Page() {
-  const title = "activities";
-  return (
-    <main className="p-8">
-      <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-50">activities</h1>
-    </main>
-  );
+﻿import { Suspense } from "react";
+import ActivityList from "@/components/features/activities/ActivityList";
+import SkeletonList from "@/components/shared/SkeletonList";
+export default function ActivitiesPage() {
+  return <Suspense fallback={<div className="p-6"><SkeletonList rows={8} /></div>}><ActivityList /></Suspense>;
 }

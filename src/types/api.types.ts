@@ -100,46 +100,73 @@ export interface Customer {
 // ── Opportunity ────────────────────────────────────────────────────────────
 export interface Opportunity {
   id: string;
-  title: string;
-  customerId: string;
-  customer?: Pick<Customer, "id" | "name">;
+  name: string;
+  leadId?: string | null;
+  lead?: { id: string; leadName: string; companyName: string } | null;
+  customerId?: string | null;
+  customer?: { id: string; companyName?: string | null; contactPerson: string } | null;
+  serviceId?: string | null;
+  service?: Pick<Service, "id" | "name"> | null;
+  categoryId?: string | null;
+  category?: Pick<Category, "id" | "name"> | null;
+  productId?: string | null;
+  product?: Pick<Product, "id" | "name"> | null;
   stage: OpportunityStage;
-  value?: number;
-  probability?: number;
-  expectedCloseDate?: string;
-  notes?: string;
-  marketingPersonId?: string;
+  estimatedValue?: number | null;
+  expectedClosingDate?: string | null;
+  notes?: string | null;
   managerId?: string;
+  manager?: Pick<User, "id" | "name" | "email"> | null;
+  marketingPersonId?: string;
+  marketingPerson?: Pick<User, "id" | "name" | "email"> | null;
   createdAt: string;
   updatedAt: string;
 }
 
 // ── Activity ───────────────────────────────────────────────────────────────
+export type ActivityRelatedType = "LEAD" | "CUSTOMER" | "OPPORTUNITY";
+
 export interface Activity {
   id: string;
+  relatedType: ActivityRelatedType;
+  relatedId: string;
+  assignedUserId?: string | null;
+  assignedUser?: Pick<User, "id" | "name" | "email" | "role"> | null;
   type: ActivityType;
-  subject: string;
-  description?: string;
-  scheduledAt?: string;
-  completedAt?: string;
-  leadId?: string;
-  customerId?: string;
-  opportunityId?: string;
-  marketingPersonId?: string;
+  activityDate: string;
+  activityTime?: string | null;
+  outcome?: string | null;
+  nextFollowUp?: string | null;
+  notes?: string | null;
+  status: "ACTIVE" | "INACTIVE";
   createdAt: string;
-  updatedAt: string;
 }
 
 // ── Survey ─────────────────────────────────────────────────────────────────
 export interface Survey {
   id: string;
-  title: string;
+  opportunityId: string;
+  opportunity?: { id: string; name: string; stage: string } | null;
+  customerId?: string | null;
+  customer?: { id: string; companyName?: string | null; contactPerson: string } | null;
+  leadId?: string | null;
+  lead?: { id: string; leadName: string; companyName: string } | null;
+  serviceId?: string | null;
+  service?: Pick<Service, "id" | "name"> | null;
+  productId?: string | null;
+  product?: Pick<Product, "id" | "name"> | null;
+  location: string;
+  requirement: string;
+  technicalRequirement?: string | null;
+  quantity?: number | null;
+  budget?: number | null;
+  surveyDate: string;
+  assignedPersonId?: string | null;
+  assignedPerson?: Pick<User, "id" | "name" | "email" | "role"> | null;
+  result?: string | null;
+  notes?: string | null;
+  attachments?: Record<string, unknown> | null;
   status: SurveyStatus;
-  customerId?: string;
-  opportunityId?: string;
-  surveyDate?: string;
-  notes?: string;
-  assignedPersonId?: string;
   createdAt: string;
   updatedAt: string;
 }

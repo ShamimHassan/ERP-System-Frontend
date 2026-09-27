@@ -79,41 +79,55 @@ export const updateCustomerSchema = createCustomerSchema.partial();
 
 // ── Opportunity ───────────────────────────────────────────────────────────
 export const createOpportunitySchema = z.object({
-  title:             z.string().min(1, "Title is required").max(200),
-  customerId:        z.string().uuid("Select a customer"),
-  stage:             z.enum(OPPORTUNITY_STAGES).default("QUALIFICATION"),
-  value:             z.coerce.number().positive("Must be positive").optional(),
-  probability:       z.coerce.number().min(0).max(100).optional(),
-  expectedCloseDate: z.string().date("Enter a valid date").optional().or(z.literal("")),
-  notes:             z.string().max(2000).optional(),
-  managerId:         z.string().uuid().optional(),
-  marketingPersonId: z.string().uuid().optional(),
+  name:                z.string().min(1, "Name is required").max(200),
+  leadId:              z.string().uuid().optional().or(z.literal("")),
+  customerId:          z.string().uuid().optional().or(z.literal("")),
+  serviceId:           z.string().uuid().optional().or(z.literal("")),
+  categoryId:          z.string().uuid().optional().or(z.literal("")),
+  productId:           z.string().uuid().optional().or(z.literal("")),
+  estimatedValue:      z.coerce.number().positive("Must be positive").optional(),
+  expectedClosingDate: z.string().date("Enter a valid date").optional().or(z.literal("")),
+  stage:               z.enum(OPPORTUNITY_STAGES).default("QUALIFICATION"),
+  notes:               z.string().max(2000).optional(),
+  managerId:           z.string().uuid().optional(),
+  marketingPersonId:   z.string().uuid().optional(),
 });
 
 export const updateOpportunitySchema = createOpportunitySchema.partial();
 
 // ── Activity ──────────────────────────────────────────────────────────────
 export const createActivitySchema = z.object({
-  type:            z.enum(ACTIVITY_TYPES, { required_error: "Select activity type" }),
-  subject:         z.string().min(1, "Subject is required").max(200),
-  description:     z.string().max(2000).optional(),
-  scheduledAt:     z.string().datetime({ offset: true }).optional().or(z.literal("")),
-  leadId:          z.string().uuid().optional(),
-  customerId:      z.string().uuid().optional(),
-  opportunityId:   z.string().uuid().optional(),
+  relatedType:    z.enum(["LEAD", "CUSTOMER", "OPPORTUNITY"] as const, { required_error: "Select related type" }),
+  relatedId:      z.string().uuid("Select a related record"),
+  assignedUserId: z.string().uuid().optional(),
+  type:           z.enum(ACTIVITY_TYPES, { required_error: "Select activity type" }),
+  activityDate:   z.string().date("Enter a valid date"),
+  activityTime:   z.string().max(20).optional().or(z.literal("")),
+  outcome:        z.string().max(500).optional(),
+  nextFollowUp:   z.string().date("Enter a valid date").optional().or(z.literal("")),
+  notes:          z.string().max(2000).optional(),
+  status:         z.enum(["ACTIVE", "INACTIVE"] as const).default("ACTIVE"),
 });
 
 export const updateActivitySchema = createActivitySchema.partial();
 
 // ── Survey ────────────────────────────────────────────────────────────────
 export const createSurveySchema = z.object({
-  title:            z.string().min(1, "Title is required").max(200),
-  status:           z.enum(SURVEY_STATUSES).default("PENDING"),
-  customerId:       z.string().uuid().optional(),
-  opportunityId:    z.string().uuid().optional(),
-  surveyDate:       z.string().date("Enter a valid date").optional().or(z.literal("")),
-  notes:            z.string().max(2000).optional(),
-  assignedPersonId: z.string().uuid().optional(),
+  opportunityId:        z.string().uuid("Select an opportunity"),
+  customerId:           z.string().uuid().optional().or(z.literal("")),
+  leadId:               z.string().uuid().optional().or(z.literal("")),
+  serviceId:            z.string().uuid().optional().or(z.literal("")),
+  productId:            z.string().uuid().optional().or(z.literal("")),
+  location:             z.string().min(1, "Location is required").max(300),
+  requirement:          z.string().min(1, "Requirement is required").max(2000),
+  technicalRequirement: z.string().max(2000).optional(),
+  quantity:             z.coerce.number().int().positive().optional(),
+  budget:               z.coerce.number().positive().optional(),
+  surveyDate:           z.string().date("Enter a valid date"),
+  assignedPersonId:     z.string().uuid().optional(),
+  result:               z.string().max(2000).optional(),
+  notes:                z.string().max(2000).optional(),
+  status:               z.enum(SURVEY_STATUSES).default("PENDING"),
 });
 
 export const updateSurveySchema = createSurveySchema.partial();
