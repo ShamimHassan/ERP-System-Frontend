@@ -1,8 +1,9 @@
-﻿export default function Page() {
-  const title = "change-password";
+﻿import ChangePasswordForm from "@/components/features/auth/ChangePasswordForm";
+
+export default function ChangePasswordPage() {
   return (
-    <main className="p-8">
-      <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-50">change-password</h1>
-    </main>
+    <div className="p-6">
+      <ChangePasswordForm />
+    </div>
   );
 }

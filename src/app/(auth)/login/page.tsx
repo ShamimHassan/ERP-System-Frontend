@@ -1,8 +1,5 @@
-﻿export default function Page() {
-  const title = "login";
-  return (
-    <main className="p-8">
-      <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-50">login</h1>
-    </main>
-  );
+﻿import LoginForm from "@/components/features/auth/LoginForm";
+
+export default function LoginPage() {
+  return <LoginForm />;
 }
