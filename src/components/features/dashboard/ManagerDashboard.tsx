@@ -50,7 +50,7 @@ export default function ManagerDashboard() {
       <div>
         <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50">Team Dashboard</h1>
         <p className="text-sm text-slate-500 dark:text-slate-400">
-          Your team's performance overview
+          Your team&apos;s performance overview
         </p>
       </div>
 

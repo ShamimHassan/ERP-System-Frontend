@@ -91,7 +91,7 @@ export default function QuotationItemsEditor({ discountTotal, taxTotal }: Quotat
       </div>
 
       {fields.length === 0 && (
-        <p className="py-4 text-center text-sm text-slate-500">No items yet. Click "+ Add Item" to start.</p>
+        <p className="py-4 text-center text-sm text-slate-500">No items yet. Click &quot;+ Add Item&quot; to start.</p>
       )}
 
       {fields.map((field, i) => {

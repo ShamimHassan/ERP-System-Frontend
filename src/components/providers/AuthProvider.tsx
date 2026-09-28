@@ -21,24 +21,20 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   useEffect(() => {
     if (!accessToken) {
       // No token — nothing to validate; render immediately
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setChecked(true);
       return;
     }
 
     // Validate stored token against the backend.
-    // The response interceptor (Step 6) unwraps the { success, data } envelope,
-    // so the resolved value is AuthUser directly. We cast via unknown because
-    // the stub api-client doesn't have the interceptor yet.
     api
       .get("/auth/me")
       .then((res) => {
         const user = res as unknown as AuthUser;
-        // Refresh the user object in store (role/name may have changed server-side)
         const { accessToken: at, refreshToken: rt } = useAuthStore.getState();
         if (at && rt) setLogin(user, at, rt);
       })
       .catch(() => {
-        // Refresh flow in interceptor already tried; if we're here, logout
         logout();
       })
       .finally(() => setChecked(true));
