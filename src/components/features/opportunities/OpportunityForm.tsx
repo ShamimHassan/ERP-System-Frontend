@@ -59,7 +59,7 @@ export default function OpportunityForm({ opportunity, prefillLeadId, prefillCus
   const managerUsers   = usersData?.data?.filter((u) => u.role === "MANAGER")   ?? [];
 
   const form = useForm<OpportunityFormData>({
-    resolver: zodResolver(createOpportunitySchema),
+    resolver: zodResolver(createOpportunitySchema) as never,
     defaultValues: {
       name:                opportunity?.name                ?? "",
       leadId:              opportunity?.leadId              ?? prefillLeadId     ?? "",

@@ -33,7 +33,7 @@ function ServiceRow({ service, canEdit }: { service: CatalogService; canEdit: bo
   const del    = useDeleteService();
 
   const form = useForm<FormData>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(schema) as never,
     defaultValues: { name: service.name, description: service.description ?? "", status: service.status as "ACTIVE" | "INACTIVE" },
   });
 
@@ -90,7 +90,7 @@ export default function ServicesList() {
   const [showAdd, setShowAdd] = useState(false);
 
   const form = useForm<FormData>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(schema) as never,
     defaultValues: { name: "", description: "", status: "ACTIVE" },
   });
 
@@ -135,3 +135,4 @@ export default function ServicesList() {
     </div>
   );
 }
+

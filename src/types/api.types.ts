@@ -4,7 +4,7 @@
 import type {
   LeadStatus, LeadSource, Priority,
   QuotationStatus, OrderStatus, OpportunityStage,
-  SurveyStatus, ActivityType, CustomerType, BillingType,
+  SurveyStatus, ActivityType, CustomerType,
   Metric, PeriodType, AuditModule, AuditAction,
 } from "./enums";
 

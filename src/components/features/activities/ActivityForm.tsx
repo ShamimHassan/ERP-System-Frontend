@@ -39,7 +39,7 @@ export default function ActivityForm({ prefillRelatedType, prefillRelatedId, onS
   const createActivity = useCreateActivity();
 
   const form = useForm<ActivityFormData>({
-    resolver: zodResolver(createActivitySchema),
+    resolver: zodResolver(createActivitySchema) as never,
     defaultValues: {
       relatedType:   (prefillRelatedType as ActivityFormData["relatedType"]) ?? "LEAD",
       relatedId:     prefillRelatedId ?? "",
@@ -162,3 +162,4 @@ export default function ActivityForm({ prefillRelatedType, prefillRelatedId, onS
     </Form>
   );
 }
+

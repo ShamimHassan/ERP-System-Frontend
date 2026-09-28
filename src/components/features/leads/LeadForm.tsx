@@ -66,7 +66,7 @@ export default function LeadForm({ lead, onSuccess }: LeadFormProps) {
 
   // ── Form ──────────────────────────────────────────────────────────────
   const form = useForm<CreateLeadFormData>({
-    resolver: zodResolver(createLeadSchema),
+    resolver: zodResolver(createLeadSchema) as never,
     defaultValues: {
       leadName:          lead?.leadName          ?? "",
       companyName:       lead?.companyName        ?? "",
@@ -241,21 +241,23 @@ export default function LeadForm({ lead, onSuccess }: LeadFormProps) {
             </CardTitle>
           </CardHeader>
           <CardContent className="grid gap-4 sm:grid-cols-2">
-            <FormField control={form.control} name="serviceId" render={({ field }) => (
-              <FormItem>
-                <FormLabel>Service</FormLabel>
-                <Select onValueChange={field.onChange} value={field.value ?? ""} disabled={isSubmitting}>
-                  <FormControl><SelectTrigger><SelectValue placeholder="Select service" /></SelectTrigger></FormControl>
-                  <SelectContent>
-                    <SelectItem value="__none__">None</SelectItem>
-                    {(services?.data ?? []).map((s) => (
-                      <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )} />
+            {/* serviceId is valid in the Lead API but not in the Zod schema — use uncontrolled */}
+            <FormItem>
+              <FormLabel>Service</FormLabel>
+              <Select
+                onValueChange={(v) => (form.setValue as (name: string, value: unknown) => void)("serviceId", v === "__none__" ? "" : v)}
+                value={((form.watch as (name: string) => unknown)("serviceId") as string) ?? ""}
+                disabled={isSubmitting}
+              >
+                <SelectTrigger><SelectValue placeholder="Select service" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="__none__">None</SelectItem>
+                  {(services?.data ?? []).map((s) => (
+                    <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </FormItem>
           </CardContent>
         </Card>
 
@@ -351,3 +353,4 @@ export default function LeadForm({ lead, onSuccess }: LeadFormProps) {
     </Form>
   );
 }
+

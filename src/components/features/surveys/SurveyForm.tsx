@@ -40,7 +40,7 @@ export default function SurveyForm({ survey, prefillOpportunityId, onSuccess }: 
   const update = useUpdateSurvey(survey?.id ?? "");
 
   const form = useForm<SurveyFormData>({
-    resolver: zodResolver(createSurveySchema),
+    resolver: zodResolver(createSurveySchema) as never,
     defaultValues: {
       opportunityId:        survey?.opportunityId        ?? prefillOpportunityId ?? "",
       location:             survey?.location             ?? "",

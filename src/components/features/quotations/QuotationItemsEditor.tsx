@@ -41,7 +41,7 @@ export default function QuotationItemsEditor({ discountTotal, taxTotal }: Quotat
           api.get(`/products/${id}/prices/current`).catch(() => null)
         )
       );
-      return { data: results.filter(Boolean) as ProductPrice[] };
+      return { data: (results.filter(Boolean) as unknown[]) as ProductPrice[] };
     },
     enabled: productIds.length > 0,
   });

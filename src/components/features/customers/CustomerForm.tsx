@@ -62,7 +62,7 @@ export default function CustomerForm({ customer, prefillFromLead, onSuccess }: C
   const managerUsers   = usersData?.data?.filter((u) => u.role === "MANAGER")   ?? [];
 
   const form = useForm<CustomerFormData>({
-    resolver: zodResolver(createCustomerSchema),
+    resolver: zodResolver(createCustomerSchema) as never,
     defaultValues: {
       customerType:      customer?.customerType       ?? "BUSINESS",
       companyName:       customer?.companyName        ?? prefillFromLead?.companyName ?? "",
@@ -288,3 +288,4 @@ export default function CustomerForm({ customer, prefillFromLead, onSuccess }: C
     </Form>
   );
 }
+

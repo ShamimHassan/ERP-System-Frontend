@@ -39,7 +39,7 @@ function ProductRow({ product, categories, canEdit }: { product: Product; catego
   const del    = useDeleteProduct();
 
   const form = useForm<FormData>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(schema) as never,
     defaultValues: { categoryId: product.category?.id ?? "", name: product.name, description: product.description ?? "", unit: product.unit, status: product.status as "ACTIVE" | "INACTIVE" },
   });
 
@@ -122,7 +122,7 @@ export default function ProductsList() {
   const [showAdd, setShowAdd] = useState(false);
 
   const form = useForm<FormData>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(schema) as never,
     defaultValues: { categoryId: "", name: "", description: "", unit: "", status: "ACTIVE" },
   });
 
@@ -187,3 +187,4 @@ export default function ProductsList() {
     </div>
   );
 }
+

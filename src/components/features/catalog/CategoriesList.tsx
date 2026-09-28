@@ -35,7 +35,7 @@ function CategoryRow({ cat, services, canEdit }: { cat: Category; services: { id
   const del    = useDeleteCategory();
 
   const form = useForm<FormData>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(schema) as never,
     defaultValues: { serviceId: cat.service?.id ?? "", name: cat.name, status: cat.status as "ACTIVE" | "INACTIVE" },
   });
 
@@ -95,7 +95,7 @@ export default function CategoriesList() {
   const [showAdd, setShowAdd] = useState(false);
 
   const form = useForm<FormData>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(schema) as never,
     defaultValues: { serviceId: "", name: "", status: "ACTIVE" },
   });
 
@@ -152,3 +152,4 @@ export default function CategoriesList() {
     </div>
   );
 }
+

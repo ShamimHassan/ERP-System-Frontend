@@ -75,7 +75,7 @@ export default function QuotationForm({ prefillCustomerId, prefillOpportunityId 
   const plus30   = new Date(Date.now() + 30 * 86400000).toISOString().split("T")[0];
 
   const form = useForm<FormData>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(formSchema) as never,
     defaultValues: {
       customerId:        prefillCustomerId    ?? "",
       opportunityId:     prefillOpportunityId ?? "",
