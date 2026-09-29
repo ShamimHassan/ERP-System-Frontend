@@ -12,6 +12,7 @@
 
 # Markdown docs
 *.md
+!README.md
 
 #Documentation
 *.pdf
