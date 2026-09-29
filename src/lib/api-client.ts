@@ -15,9 +15,7 @@ import { useAuthStore } from "@/store/auth.store";
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   timeout: 30_000,  // 30s — Vercel serverless cold-start can take up to 15s
-  headers: {
-    "Connection": "keep-alive",  // reuse TCP connection
-  },
+  // Note: "Connection" header is a forbidden browser header — browsers set it automatically
 });
 
 // ── Request interceptor — attach Bearer token ─────────────────────────────

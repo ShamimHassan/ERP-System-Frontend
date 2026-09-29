@@ -6,9 +6,14 @@ import { useEffect, useState } from "react";
 import {
   LayoutDashboard, Users, ClipboardList, Building2, Target,
   Phone, Search, FileText, Package, Wrench, FolderOpen, Boxes,
-  BadgeDollarSign, TrendingUp, BarChart3, KeySquare, ShieldCheck,
+  TrendingUp, BarChart3, KeySquare, ShieldCheck,
   X, ChevronRight,
 } from "lucide-react";
+
+// Custom taka icon to replace BadgeDollarSign
+function TakaIcon({ className }: { className?: string }) {
+  return <span className={className} style={{ fontWeight: 700, fontSize: "0.9em", lineHeight: 1 }}>৳</span>;
+}
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/store/auth.store";
 import { useUiStore } from "@/store/ui.store";
@@ -52,7 +57,7 @@ const NAV: NavGroup[] = [
       { label: "Services",   href: "/catalog/services",   icon: Wrench },
       { label: "Categories", href: "/catalog/categories", icon: FolderOpen },
       { label: "Products",   href: "/catalog/products",   icon: Boxes },
-      { label: "Pricing",    href: "/catalog/prices",     icon: BadgeDollarSign },
+      { label: "Pricing",    href: "/catalog/prices",     icon: TakaIcon },
     ],
   },
   {
@@ -200,11 +205,13 @@ export default function Sidebar() {
       </aside>
 
       {/* ── Mobile Sheet (< lg only) ──
-           Key fix: only set open=true when NOT on desktop.
-           This prevents the Sheet overlay from appearing over desktop content. */}
+           modal={false}: prevents Radix from locking body scroll, which
+           causes the background to dim/shift on mobile (looks like blur).
+           The dashboard layout already handles overflow via h-screen. */}
       <Sheet
         open={!isDesktop && sidebarOpen}
         onOpenChange={(v) => setSidebarOpen(v)}
+        modal={false}
       >
         <SheetContent side="left" className="w-56 p-0">
           <div className="flex h-full flex-col">

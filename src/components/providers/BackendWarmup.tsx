@@ -16,14 +16,10 @@ export default function BackendWarmup() {
     const url = process.env.NEXT_PUBLIC_API_URL;
     if (!url) return;
 
-    // Ping a cheap endpoint — /health or the services list (tiny response)
-    fetch(`${url}/services?limit=1`, {
+    fetch(`${url.replace(/\/api$/, '')}/health`, {
       method: "GET",
       headers: { Accept: "application/json" },
-      // No auth needed — public endpoint; ignore the 401/403 response
-    }).catch(() => {
-      // Silently ignore — warmup is fire-and-forget
-    });
+    }).catch(() => null);
   }, []);
 
   // Renders nothing — purely a side-effect component

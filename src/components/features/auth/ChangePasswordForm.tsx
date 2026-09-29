@@ -5,6 +5,7 @@ import { useForm, type Control } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, KeyRound } from "lucide-react";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 import { changePasswordSchema, type ChangePasswordFormData } from "@/lib/zod-schemas";
 import api from "@/lib/api-client";
@@ -71,6 +72,7 @@ function PasswordField({
 }
 
 export default function ChangePasswordForm() {
+  const router = useRouter();
   const [show, setShow] = useState<ShowFields>({
     oldPassword: false, newPassword: false, confirmPassword: false,
   });
@@ -150,7 +152,7 @@ export default function ChangePasswordForm() {
 
               <div className="flex gap-3 pt-2">
                 <Button type="button" variant="outline" className="flex-1" disabled={isSubmitting}
-                  onClick={() => form.reset()}>
+                  onClick={() => router.back()}>
                   Cancel
                 </Button>
                 <Button type="submit" className="flex-1" disabled={isSubmitting}>

@@ -1,24 +1,47 @@
-﻿"use client";
+"use client";
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import api from "@/lib/api-client";
 import type { CatalogService, Category, Product, ProductPrice, PriceHistory, PaginationMeta } from "@/types/api.types";
+import { LIST_DEFAULTS } from "@/components/shared/useListParams";
 
 type ListResponse<T> = { data: T[]; meta: PaginationMeta };
 
+/**
+ * Ensure the passed params ALWAYS include page/limit/sort keys so the
+ * React Query cache key has the SAME shape regardless of caller.
+ *
+ * This guarantees PrefetchProvider hits the exact same cache slot that
+ * a list page's initial render reads — the #1 thing that makes the app
+ * feel instant after login.
+ */
+function withListDefaults(params: Record<string, unknown> = {}): Record<string, unknown> {
+  const merged: Record<string, unknown> = {
+    page:  LIST_DEFAULTS.page,
+    limit: LIST_DEFAULTS.limit,
+    sort:  LIST_DEFAULTS.sort,
+  };
+  for (const [k, v] of Object.entries(params)) {
+    if (v !== undefined && v !== null && v !== "") merged[k] = v;
+  }
+  return merged;
+}
+
 // ── Generic list helper ────────────────────────────────────────────────────
 function mkList<T>(key: string, endpoint: string) {
-  return (params: Record<string, unknown> = {}) =>
-    useQuery<ListResponse<T>>({
-      queryKey: [key, params],
+  return (params: Record<string, unknown> = {}) => {
+    const stable = withListDefaults(params);
+    return useQuery<ListResponse<T>>({
+      queryKey: [key, stable],
       queryFn: async () => {
-        const res = await api.get(endpoint, { params }) as unknown;
+        const res = await api.get(endpoint, { params: stable }) as unknown;
         if (Array.isArray(res)) return { data: res as T[], meta: { page: 1, limit: 100, total: (res as T[]).length, totalPages: 1 } };
         return res as ListResponse<T>;
       },
       placeholderData: (prev) => prev,
     });
+  };
 }
 
 // ── Services ──────────────────────────────────────────────────────────────
