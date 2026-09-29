@@ -45,6 +45,7 @@ export const createLeadSchema = z.object({
   companyName:       z.string().min(1, "Company name is required").max(200),
   phone:             z.string().min(1, "Phone is required").max(30),
   email:             z.string().email("Enter a valid email").optional().or(z.literal("")),
+  address:           z.string().max(500).optional().or(z.literal("")),
   leadSource:        z.enum(LEAD_SOURCES, { required_error: "Select a source" }),
   priority:          z.enum(PRIORITIES, { required_error: "Select a priority" }),
   status:            z.enum(LEAD_STATUSES).default("NEW"),

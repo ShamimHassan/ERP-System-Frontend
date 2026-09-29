@@ -68,6 +68,30 @@ const COLUMNS: ColumnDef<Lead>[] = [
     ),
   },
   {
+    key: "email",
+    header: "Email",
+    cell: (row) =>
+      row.email ? (
+        <a href={`mailto:${row.email}`} className="text-blue-600 hover:underline dark:text-blue-400 text-xs">
+          {row.email}
+        </a>
+      ) : (
+        <span className="text-slate-400">—</span>
+      ),
+  },
+  {
+    key: "address",
+    header: "Address",
+    cell: (row) =>
+      row.address ? (
+        <span className="text-xs text-slate-600 dark:text-slate-400 max-w-[160px] block truncate" title={row.address}>
+          {row.address}
+        </span>
+      ) : (
+        <span className="text-slate-400">—</span>
+      ),
+  },
+  {
     key: "leadSource",
     header: "Source",
     cell: (row) => (

@@ -81,6 +81,7 @@ export default function LeadForm({ lead, onSuccess }: LeadFormProps) {
       companyName:       lead?.companyName        ?? "",
       phone:             lead?.phone              ?? "",
       email:             lead?.email              ?? "",
+      address:           lead?.address            ?? "",
       leadSource:        lead?.leadSource         ?? undefined,
       priority:          lead?.priority           ?? "MEDIUM",
       status:            lead?.status             ?? "NEW",
@@ -155,6 +156,16 @@ export default function LeadForm({ lead, onSuccess }: LeadFormProps) {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl><Input {...field} type="email" placeholder="contact@company.com" disabled={isSubmitting} /></FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
+
+            <FormField control={form.control} name="address" render={({ field }) => (
+              <FormItem className="sm:col-span-2">
+                <FormLabel>Address</FormLabel>
+                <FormControl>
+                  <Input {...field} placeholder="e.g. 123 Main Street, Dhaka" disabled={isSubmitting} value={field.value ?? ""} />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )} />

@@ -9,6 +9,7 @@ import RoleAccessSection from "./sections/RoleAccessSection";
 import StatsSection from "./sections/StatsSection";
 import TestimonialsSection from "./sections/TestimonialsSection";
 import FaqSection from "./sections/FaqSection";
+import ContactSection from "./sections/ContactSection";
 import CtaSection from "./sections/CtaSection";
 import LandingFooter from "./LandingFooter";
 
@@ -24,6 +25,7 @@ export default function LandingPage() {
       <StatsSection />
       <TestimonialsSection />
       <FaqSection />
+      <ContactSection />
       <CtaSection />
       <LandingFooter />
     </div>
