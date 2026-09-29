@@ -21,6 +21,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { ThemeToggle } from "@/components/shared/ThemeToggle";
 
 const ROLE_BADGE: Record<string, string> = {
   ADMIN:     "bg-violet-100 text-violet-800 dark:bg-violet-900/30 dark:text-violet-300",
@@ -74,6 +75,9 @@ export default function TopBar() {
 
       {/* Spacer on desktop */}
       <div className="flex-1" />
+
+      {/* Theme toggle */}
+      <ThemeToggle className="mr-1" />
 
       {/* User profile chip */}
       <DropdownMenu>

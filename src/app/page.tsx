@@ -1,11 +1,16 @@
 /**
- * Root page — redirects authenticated users to /dashboard.
- * During development this also serves as a checkpoint demo.
+ * Landing Page — ERP Sales & Marketing
+ *
+ * Full-featured public landing page per the content outline:
+ * Hero → Features → Services → How It Works → Role Access →
+ * Statistics → Testimonials → FAQ → CTA → Footer
+ *
+ * Dark/light aware via Tailwind dark: variants + next-themes.
+ * Navbar shows 4 links when logged-out, 6 links + profile dropdown when logged-in.
  */
-import { redirect } from "next/navigation";
+
+import LandingPage from "@/components/features/landing/LandingPage";
 
 export default function RootPage() {
-  // Server component redirect — authenticated flow goes to dashboard.
-  // The dashboard layout handles unauthenticated redirect to /login.
-  redirect("/dashboard");
+  return <LandingPage />;
 }

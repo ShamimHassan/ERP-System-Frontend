@@ -103,7 +103,7 @@ export default function FilterPopover({
           {activeCount > 0 && (
             <Badge
               variant="default"
-              className="absolute -right-1.5 -top-1.5 flex h-4 w-4 items-center justify-center rounded-full p-0 text-[10px]"
+              className="absolute -right-1.5 -top-1.5 flex h-4 w-4 items-center justify-center rounded-full p-0 text-xs"
             >
               {activeCount}
             </Badge>

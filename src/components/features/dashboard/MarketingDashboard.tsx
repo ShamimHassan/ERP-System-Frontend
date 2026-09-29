@@ -102,7 +102,7 @@ export default function MarketingDashboard() {
       {/* ── Target vs Achievement + Conversion Rate ── */}
       <div className="grid gap-4 md:grid-cols-2">
         {/* Target vs Achievement */}
-        <Card className="border-slate-200 dark:border-slate-800">
+        <Card className="border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800/60">
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center justify-between text-sm font-medium text-slate-600 dark:text-slate-400">
               Target vs Achievement (YTD)
@@ -122,8 +122,7 @@ export default function MarketingDashboard() {
                     {fmtBDT(stats.revenueYtd)} / {fmtBDT(stats.target)}
                   </span>
                 </div>
-                {/* Progress bar */}
-                <div className="h-2.5 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+                <div className="h-2.5 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-700">
                   <div
                     className={`h-full rounded-full transition-all ${
                       stats.achievementPct >= 80
@@ -144,7 +143,7 @@ export default function MarketingDashboard() {
         </Card>
 
         {/* Conversion Rate */}
-        <Card className="border-slate-200 dark:border-slate-800">
+        <Card className="border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800/60">
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center justify-between text-sm font-medium text-slate-600 dark:text-slate-400">
               Conversion Rate
@@ -167,13 +166,10 @@ export default function MarketingDashboard() {
                   ].map((item) => (
                     <div key={item.label} className={`rounded-lg p-2 text-center ${item.color}`}>
                       <p className="text-lg font-bold">{item.val}</p>
-                      <p className="text-[10px] font-medium uppercase tracking-wide">{item.label}</p>
+                      <p className="text-xs font-medium uppercase tracking-wide">{item.label}</p>
                     </div>
                   ))}
                 </div>
-                <p className="text-xs text-slate-500">
-                  Recharts funnel chart — Step 22
-                </p>
               </div>
             )}
           </CardContent>
@@ -183,7 +179,7 @@ export default function MarketingDashboard() {
       {/* ── Recent Leads + Upcoming Activities ── */}
       <div className="grid gap-4 lg:grid-cols-2">
         {/* Recent Leads */}
-        <Card className="border-slate-200 dark:border-slate-800">
+        <Card className="border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800/60">
           <CardHeader className="flex flex-row items-center justify-between pb-3">
             <CardTitle className="text-sm font-semibold text-slate-700 dark:text-slate-300">
               Recent Leads
@@ -225,7 +221,7 @@ export default function MarketingDashboard() {
         </Card>
 
         {/* Upcoming Activities */}
-        <Card className="border-slate-200 dark:border-slate-800">
+        <Card className="border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800/60">
           <CardHeader className="flex flex-row items-center justify-between pb-3">
             <CardTitle className="text-sm font-semibold text-slate-700 dark:text-slate-300">
               Upcoming Activities
@@ -248,7 +244,7 @@ export default function MarketingDashboard() {
                     <div className="mt-0.5 shrink-0">
                       <Badge
                         variant="outline"
-                        className="text-[10px] font-medium uppercase tracking-wide"
+                        className="text-xs font-medium uppercase tracking-wide"
                       >
                         {act.type.replace("_", " ")}
                       </Badge>
@@ -268,10 +264,6 @@ export default function MarketingDashboard() {
           </CardContent>
         </Card>
       </div>
-
-      <p className="text-center text-xs text-slate-400">
-        Revenue chart (Recharts bar) + full API wiring → Step 22
-      </p>
     </div>
   );
 }

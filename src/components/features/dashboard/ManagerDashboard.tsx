@@ -89,7 +89,7 @@ export default function ManagerDashboard() {
 
       {/* ── Team Target vs Achievement ── */}
       <div className="grid gap-4 md:grid-cols-2">
-        <Card className="border-slate-200 dark:border-slate-800">
+        <Card className="border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800/60">
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center justify-between text-sm font-medium text-slate-600 dark:text-slate-400">
               Team Revenue Achievement (YTD)
@@ -109,7 +109,7 @@ export default function ManagerDashboard() {
                     {fmtBDT(stats.teamRevenue)} / {fmtBDT(stats.teamTarget)}
                   </span>
                 </div>
-                <div className="h-2.5 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+                <div className="h-2.5 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-700">
                   <div
                     className={`h-full rounded-full ${
                       stats.teamAchievementPct >= 80 ? "bg-emerald-500"
@@ -127,7 +127,7 @@ export default function ManagerDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="border-slate-200 dark:border-slate-800">
+        <Card className="border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800/60">
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center justify-between text-sm font-medium text-slate-600 dark:text-slate-400">
               Team Conversion Rate
@@ -150,11 +150,10 @@ export default function ManagerDashboard() {
                   ].map((item) => (
                     <div key={item.label} className={`rounded-lg p-2 text-center ${item.color}`}>
                       <p className="text-lg font-bold">{item.val}</p>
-                      <p className="text-[10px] font-medium uppercase tracking-wide">{item.label}</p>
+                      <p className="text-xs font-medium uppercase tracking-wide">{item.label}</p>
                     </div>
                   ))}
                 </div>
-                <p className="text-xs text-slate-500">Stacked bar chart — Step 22</p>
               </div>
             )}
           </CardContent>
@@ -163,10 +162,6 @@ export default function ManagerDashboard() {
 
       {/* ── Mandatory Team Performance Table ── */}
       <TeamPerformanceTable rows={teamRows} isLoading={isLoading} />
-
-      <p className="text-center text-xs text-slate-400">
-        Team revenue trend (Recharts stacked bar) + live API wiring → Step 22
-      </p>
     </div>
   );
 }

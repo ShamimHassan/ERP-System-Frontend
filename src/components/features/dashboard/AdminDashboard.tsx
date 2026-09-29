@@ -134,7 +134,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* ── Service-wise Revenue Breakdown ── */}
-      <Card className="border-slate-200 dark:border-slate-800">
+      <Card className="border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800/60">
         <CardHeader className="pb-3">
           <CardTitle className="text-sm font-semibold text-slate-700 dark:text-slate-300">
             Revenue by Service
@@ -151,7 +151,7 @@ export default function AdminDashboard() {
                     {item.service}
                   </span>
                   <div className="flex-1">
-                    <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+                    <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-700">
                       <div
                         className={`h-full rounded-full ${colors[i]}`}
                         style={{ width: `${item.pct}%` }}
@@ -166,9 +166,6 @@ export default function AdminDashboard() {
                   </span>
                 </div>
               ))}
-              <p className="pt-1 text-xs text-slate-400">
-                Pie / donut chart (Recharts) — Step 22
-              </p>
             </div>
           )}
         </CardContent>
@@ -176,10 +173,6 @@ export default function AdminDashboard() {
 
       {/* ── Manager-wise Performance Table ── */}
       <TeamPerformanceTable rows={managerRows} isLoading={isLoading} />
-
-      <p className="text-center text-xs text-slate-400">
-        Conversion rate line chart + top performers leaderboard → Step 22
-      </p>
     </div>
   );
 }

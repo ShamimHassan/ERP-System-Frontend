@@ -25,7 +25,7 @@ export default function KpiCard({
 }: KpiCardProps) {
   if (loading) {
     return (
-      <Card className={cn("border-slate-200 dark:border-slate-800", className)}>
+      <Card className={cn("border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800/60", className)}>
         <CardHeader className="pb-2">
           <Skeleton className="h-4 w-24" />
         </CardHeader>
@@ -56,7 +56,7 @@ export default function KpiCard({
       : "text-slate-400";
 
   return (
-    <Card className={cn("border-slate-200 dark:border-slate-800", className)}>
+    <Card className={cn("border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800/60", className)}>
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="text-sm font-medium text-slate-600 dark:text-slate-400">
           {title}

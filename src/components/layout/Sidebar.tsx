@@ -114,7 +114,7 @@ function NavList({ role, pathname, onLinkClick }: {
           <div key={gi} className={gi > 0 ? "mt-1" : undefined}>
             {group.group && (
               <div className="mb-1 mt-4 first:mt-0">
-                <p className="px-3 text-[10px] font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-600">
+                <p className="px-3 text-xs font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-600">
                   {group.group}
                 </p>
               </div>
@@ -136,10 +136,10 @@ function RoleFooter({ role }: { role: Role }) {
   return (
     <div className="shrink-0 border-t border-slate-200 p-3 dark:border-slate-800">
       <div className="rounded-md bg-slate-50 px-3 py-2 dark:bg-slate-800/50">
-        <p className="text-[10px] font-medium uppercase tracking-wide text-slate-400 dark:text-slate-500">
+        <p className="text-xs font-medium uppercase tracking-wide text-slate-400 dark:text-slate-500">
           Logged in as
         </p>
-        <p className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+        <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">
           {role === "ADMIN" ? "System Admin" : role === "MANAGER" ? "Manager" : "Marketing"}
         </p>
       </div>
@@ -156,7 +156,7 @@ function Brand() {
       </div>
       <div className="leading-none">
         <p className="text-sm font-bold text-slate-900 dark:text-slate-50">ERP System</p>
-        <p className="text-[10px] text-slate-500 dark:text-slate-400">Sales &amp; Marketing</p>
+        <p className="text-xs text-slate-500 dark:text-slate-400">Sales &amp; Marketing</p>
       </div>
     </div>
   );
