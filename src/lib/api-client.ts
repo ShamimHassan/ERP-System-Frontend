@@ -53,9 +53,23 @@ interface RetryableConfig extends AxiosRequestConfig {
 
 // ── Response interceptor — envelope unwrap + 401 refresh ─────────────────
 api.interceptors.response.use(
-  // ✅ Success: unwrap backend's { success: true, data: T } envelope.
-  // If the response is already the raw data (e.g. health check), pass it through.
-  (res) => res.data?.data ?? res.data,
+  // ✅ Success: unwrap backend's { success: true, data: T, meta? } envelope.
+  // If meta is present (paginated list response), preserve the { data, meta } shape
+  // so list hooks receive the full pagination info.
+  // If the response is already raw data (e.g. health check), pass it through.
+  (res) => {
+    const body = res.data;
+    if (body && typeof body === "object" && "success" in body && "data" in body) {
+      // Paginated: backend sent { success, data: T[], meta: {...} }
+      if ("meta" in body && body.meta != null) {
+        return { data: body.data, meta: body.meta };
+      }
+      // Single-resource: backend sent { success, data: T }
+      return body.data;
+    }
+    // Raw response (health check, etc.)
+    return body;
+  },
 
   // ❌ Error handler
   async (error) => {

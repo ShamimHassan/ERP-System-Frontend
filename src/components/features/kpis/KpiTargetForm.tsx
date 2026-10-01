@@ -27,7 +27,7 @@ const METRIC_LABELS: Record<string, string> = {
 const schema = z.object({
   userId:      z.string().uuid("Select a user"),
   periodType:  z.enum(PERIOD_TYPES),
-  periodStart: z.string().min(1, "Select a period"),
+  periodStart: z.string().min(7, "Select a period"),
   metric:      z.enum(METRICS),
   targetValue: z.coerce.number().positive("Must be positive"),
 });
@@ -39,11 +39,20 @@ export default function KpiTargetForm() {
 
   const { data: usersData } = useQuery<{ data: { id: string; name: string; role: string }[] }>({
     queryKey: ["users-list"],
-    queryFn: () => api.get("/users", { params: { limit: 100 } }) as unknown as Promise<{ data: { id: string; name: string; role: string }[] }>,
+    queryFn: async () => {
+      const res = await api.get("/users", { params: { limit: 100 } }) as unknown;
+      // Interceptor returns { data: [...], meta } for paginated responses
+      if (res && typeof res === "object" && "data" in (res as object)) return res as { data: { id: string; name: string; role: string }[] };
+      if (Array.isArray(res)) return { data: res as { id: string; name: string; role: string }[] };
+      return res as { data: { id: string; name: string; role: string }[] };
+    },
+    // Only fetch when we have a valid auth session
+    enabled: !!user,
+    staleTime: 5 * 60_000, // 5 min — user list rarely changes
   });
 
   const today = new Date();
-  const defaultPeriodStart = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-01`;
+  const defaultPeriodStart = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}`;
 
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -60,11 +69,12 @@ export default function KpiTargetForm() {
   const periodType = form.watch("periodType");
 
   function onSubmit(values: FormData) {
-    // Convert month input to first day of month
+    // type="month" gives "yyyy-MM", type="date" gives "yyyy-MM-dd"
+    // Normalise to always send "yyyy-MM-dd" to the backend
     const periodStart = values.periodStart.length === 7
       ? `${values.periodStart}-01`
       : values.periodStart;
-    setTarget.mutate({ ...values, periodStart }, { onSuccess: () => form.reset({ ...form.getValues() }) });
+    setTarget.mutate({ ...values, periodStart }, { onSuccess: () => form.reset({ ...form.getValues(), targetValue: 0 }) });
   }
 
   const teamUsers = usersData?.data ?? [];

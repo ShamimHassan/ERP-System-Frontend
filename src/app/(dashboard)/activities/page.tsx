@@ -1,4 +1,4 @@
-﻿import { Suspense } from "react";
+import { Suspense } from "react";
 import ActivityList from "@/components/features/activities/ActivityList";
 import SkeletonList from "@/components/shared/SkeletonList";
 export default function ActivitiesPage() {

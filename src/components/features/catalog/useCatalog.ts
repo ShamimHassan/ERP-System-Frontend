@@ -36,6 +36,11 @@ function mkList<T>(key: string, endpoint: string) {
       queryKey: [key, stable],
       queryFn: async () => {
         const res = await api.get(endpoint, { params: stable }) as unknown;
+        // Interceptor now returns { data: T[], meta } for paginated responses
+        if (res && typeof res === "object" && "data" in (res as object) && "meta" in (res as object)) {
+          return res as ListResponse<T>;
+        }
+        // Fallback: raw array (should not happen with current backend, but be safe)
         if (Array.isArray(res)) return { data: res as T[], meta: { page: 1, limit: 100, total: (res as T[]).length, totalPages: 1 } };
         return res as ListResponse<T>;
       },

@@ -49,26 +49,34 @@ export default function LeadForm({ lead, onSuccess }: LeadFormProps) {
   const updateLead = useUpdateLead(lead?.id ?? "");
 
   // ── Cascading selects data ────────────────────────────────────────────
-  const { data: servicesRaw } = useQuery<{ data: { id: string; name: string }[] } | { id: string; name: string }[]>({
+  const { data: servicesRaw } = useQuery<{ data: { id: string; name: string }[] }>({
     queryKey: ["services-list"],
-    queryFn: () => api.get("/services", { params: { limit: 100 } }) as unknown as Promise<{ data: { id: string; name: string }[] }>,
+    queryFn: async () => {
+      const res = await api.get("/services", { params: { limit: 100 } }) as unknown;
+      if (res && typeof res === "object" && "data" in (res as object)) return res as { data: { id: string; name: string }[] };
+      if (Array.isArray(res)) return { data: res as { id: string; name: string }[] };
+      return res as { data: { id: string; name: string }[] };
+    },
+    enabled: !!user,
+    staleTime: 5 * 60_000,
   });
 
-  // api-client unwraps envelope: response may be array or {data: array}
-  const servicesList: { id: string; name: string }[] = Array.isArray(servicesRaw)
-    ? (servicesRaw as { id: string; name: string }[])
-    : ((servicesRaw as { data: { id: string; name: string }[] })?.data ?? []);
+  // api-client returns { data: array, meta } — extract just the array
+  const servicesList: { id: string; name: string }[] = servicesRaw?.data ?? [];
 
-  // ── Assignable users (for ADMIN/MANAGER roles) ────────────────────────
-  const { data: usersRaw } = useQuery<{ data: { id: string; name: string; role: string; managerId?: string }[] } | { id: string; name: string; role: string; managerId?: string }[]>({
+  const { data: usersRaw } = useQuery<{ data: { id: string; name: string; role: string; managerId?: string }[] }>({
     queryKey: ["users-list"],
-    queryFn: () => api.get("/users", { params: { limit: 100 } }) as unknown as Promise<{ data: { id: string; name: string; role: string }[] }>,
-    enabled: !isMarketing,
+    queryFn: async () => {
+      const res = await api.get("/users", { params: { limit: 100 } }) as unknown;
+      if (res && typeof res === "object" && "data" in (res as object)) return res as { data: { id: string; name: string; role: string; managerId?: string }[] };
+      if (Array.isArray(res)) return { data: res };
+      return res as { data: { id: string; name: string; role: string; managerId?: string }[] };
+    },
+    enabled: !isMarketing && !!user,
+    staleTime: 5 * 60_000,
   });
 
-  const usersList: { id: string; name: string; role: string; managerId?: string }[] = Array.isArray(usersRaw)
-    ? (usersRaw as { id: string; name: string; role: string; managerId?: string }[])
-    : ((usersRaw as { data: { id: string; name: string; role: string; managerId?: string }[] })?.data ?? []);
+  const usersList: { id: string; name: string; role: string; managerId?: string }[] = usersRaw?.data ?? [];
 
   const marketingUsers = usersList.filter((u) => u.role === "MARKETING");
   const managerUsers   = usersList.filter((u) => u.role === "MANAGER");

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -15,6 +15,10 @@ export function useCustomers(params: Record<string, unknown>) {
     queryKey: ["customers", params],
     queryFn: async () => {
       const res = await api.get("/customers", { params }) as unknown;
+      // Interceptor returns { data: Customer[], meta } for paginated responses
+      if (res && typeof res === "object" && "data" in (res as object) && "meta" in (res as object)) {
+        return res as CustomersResponse;
+      }
       if (Array.isArray(res)) return { data: res as Customer[], meta: { page: 1, limit: 20, total: (res as Customer[]).length, totalPages: 1 } };
       return res as CustomersResponse;
     },

@@ -12,6 +12,7 @@ export function useOpportunities(params: Record<string, unknown>) {
     queryKey: ["opportunities", params],
     queryFn: async () => {
       const res = await api.get("/opportunities", { params }) as unknown;
+      if (res && typeof res === "object" && "data" in (res as object) && "meta" in (res as object)) return res as OpportunitiesResponse;
       if (Array.isArray(res)) return { data: res as Opportunity[], meta: { page: 1, limit: 20, total: (res as Opportunity[]).length, totalPages: 1 } };
       return res as OpportunitiesResponse;
     },

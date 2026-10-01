@@ -12,6 +12,7 @@ export function useOrders(params: Record<string, unknown>) {
     queryKey: ["orders", params],
     queryFn: async () => {
       const res = await api.get("/sales-orders", { params }) as unknown;
+      if (res && typeof res === "object" && "data" in (res as object) && "meta" in (res as object)) return res as OrdersResponse;
       if (Array.isArray(res)) return { data: res as Order[], meta: { page: 1, limit: 20, total: (res as Order[]).length, totalPages: 1 } };
       return res as OrdersResponse;
     },

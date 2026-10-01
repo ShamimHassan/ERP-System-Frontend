@@ -125,7 +125,7 @@ export default function ServicesList() {
         <CardContent className="p-0">
           {isLoading ? (
             <div className="space-y-2 p-4">{[1,2,3,4].map((i) => <Skeleton key={i} className="h-10 w-full" />)}</div>
-          ) : !data?.data.length ? (
+          ) : !data?.data?.length ? (
             <p className="p-8 text-center text-sm text-slate-500">No services yet.{canEdit ? " Click \"New Service\" to add one." : ""}</p>
           ) : (
             data.data.map((s) => <ServiceRow key={s.id} service={s} canEdit={canEdit} />)

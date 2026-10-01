@@ -142,7 +142,7 @@ export default function CategoriesList() {
         <CardContent className="p-0">
           {isLoading ? (
             <div className="space-y-2 p-4">{[1,2,3].map((i) => <Skeleton key={i} className="h-10 w-full" />)}</div>
-          ) : !data?.data.length ? (
+          ) : !data?.data?.length ? (
             <p className="p-8 text-center text-sm text-slate-500">No categories found.</p>
           ) : (
             data.data.map((c) => <CategoryRow key={c.id} cat={c} services={services} canEdit={canEdit} />)

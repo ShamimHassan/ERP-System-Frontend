@@ -132,9 +132,16 @@ export default function KpiTable({ userId, periodType = "MONTHLY", periodStart }
   const canEdit = can.setKpiTargets((user?.role as Role) ?? "MARKETING");
 
   const [selectedPeriodType, setSelectedPeriodType] = useState(periodType);
-  const [selectedPeriodStart, setSelectedPeriodStart] = useState(
-    periodStart ?? new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().split("T")[0]
-  );
+
+  // Always store as "yyyy-MM" (month input native format) — no "-01" suffix
+  const today = new Date();
+  const defaultMonth = periodStart
+    ? periodStart.slice(0, 7)
+    : `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}`;
+  const [selectedMonth, setSelectedMonth] = useState(defaultMonth);
+
+  // Derive full periodStart (first day) for the API query
+  const selectedPeriodStart = `${selectedMonth}-01`;
 
   const targetUserId = userId ?? user?.id ?? "";
 
@@ -163,8 +170,8 @@ export default function KpiTable({ userId, periodType = "MONTHLY", periodStart }
         </Select>
         <Input
           type="month"
-          value={selectedPeriodStart.slice(0, 7)}
-          onChange={(e) => setSelectedPeriodStart(`${e.target.value}-01`)}
+          value={selectedMonth}
+          onChange={(e) => setSelectedMonth(e.target.value)}
           className="h-9 w-36"
         />
         {canEdit && (

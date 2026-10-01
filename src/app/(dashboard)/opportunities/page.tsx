@@ -1,4 +1,4 @@
-﻿import { Suspense } from "react";
+import { Suspense } from "react";
 import OpportunityList from "@/components/features/opportunities/OpportunityList";
 import SkeletonList from "@/components/shared/SkeletonList";
 export default function OpportunitiesPage() {

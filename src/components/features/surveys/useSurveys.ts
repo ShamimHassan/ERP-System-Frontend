@@ -12,6 +12,7 @@ export function useSurveys(params: Record<string, unknown>) {
     queryKey: ["surveys", params],
     queryFn: async () => {
       const res = await api.get("/surveys", { params }) as unknown;
+      if (res && typeof res === "object" && "data" in (res as object) && "meta" in (res as object)) return res as SurveysResponse;
       if (Array.isArray(res)) return { data: res as Survey[], meta: { page: 1, limit: 20, total: (res as Survey[]).length, totalPages: 1 } };
       return res as SurveysResponse;
     },

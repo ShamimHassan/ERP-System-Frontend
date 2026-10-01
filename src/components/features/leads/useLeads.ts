@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -27,8 +27,10 @@ export function useLeads(params: Record<string, unknown>) {
     queryKey: ["leads", params],
     queryFn: async () => {
       const res = await api.get("/leads", { params }) as unknown;
-      // api-client unwraps envelope → res is { data: Lead[], meta }
-      // If interceptor returns raw data array, normalise it
+      // Interceptor returns { data: Lead[], meta } for paginated responses
+      if (res && typeof res === "object" && "data" in (res as object) && "meta" in (res as object)) {
+        return res as LeadsResponse;
+      }
       if (Array.isArray(res)) return { data: res as Lead[], meta: { page: 1, limit: 20, total: (res as Lead[]).length, totalPages: 1 } };
       return res as LeadsResponse;
     },

@@ -311,7 +311,7 @@ export default function ProductsList() {
             <div className="space-y-2 p-4">
               {[1, 2, 3, 4, 5].map((i) => <Skeleton key={i} className="h-12 w-full" />)}
             </div>
-          ) : !data?.data.length ? (
+          ) : !data?.data?.length ? (
             <p className="p-8 text-center text-sm text-slate-500">No products found.</p>
           ) : (
             data.data.map((p) => (

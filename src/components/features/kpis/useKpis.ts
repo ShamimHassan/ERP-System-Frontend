@@ -28,13 +28,17 @@ interface TargetsResponse {
 }
 
 // GET /api/kpis — actual vs target rows
+// Backend: ok(res, rows, meta) → interceptor returns { data: rows, meta }
 export function useKpis(params: Record<string, unknown> = {}) {
   return useQuery<KpisResponse>({
     queryKey: ["kpis", params],
     queryFn: async () => {
       const res = await api.get("/kpis", { params }) as unknown;
-      // api-client unwraps envelope: rows + meta come as the data field
-      // but the response shape is { rows, meta } not { data: ..., meta: ... }
+      // Interceptor returns { data: KpiRow[], meta } for ok(res, rows, meta)
+      if (res && typeof res === "object" && "data" in (res as object) && "meta" in (res as object)) {
+        const r = res as { data: KpiRow[]; meta: KpisResponse["meta"] };
+        return { rows: r.data, meta: r.meta };
+      }
       return res as KpisResponse;
     },
     placeholderData: (prev) => prev,
@@ -47,6 +51,10 @@ export function useKpiTargets(params: Record<string, unknown> = {}) {
     queryKey: ["kpi-targets", params],
     queryFn: async () => {
       const res = await api.get("/kpis/targets", { params }) as unknown;
+      // Interceptor returns { data: TargetRow[], meta } for paginated list
+      if (res && typeof res === "object" && "data" in (res as object) && "meta" in (res as object)) {
+        return res as TargetsResponse;
+      }
       if (Array.isArray(res)) return { data: res as TargetRow[], meta: { page: 1, limit: 50, total: (res as TargetRow[]).length, totalPages: 1 } };
       return res as TargetsResponse;
     },

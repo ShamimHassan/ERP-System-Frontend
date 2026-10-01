@@ -12,6 +12,7 @@ export function useActivities(params: Record<string, unknown>) {
     queryKey: ["activities", params],
     queryFn: async () => {
       const res = await api.get("/activities", { params }) as unknown;
+      if (res && typeof res === "object" && "data" in (res as object) && "meta" in (res as object)) return res as ActivitiesResponse;
       if (Array.isArray(res)) return { data: res as Activity[], meta: { page: 1, limit: 20, total: (res as Activity[]).length, totalPages: 1 } };
       return res as ActivitiesResponse;
     },

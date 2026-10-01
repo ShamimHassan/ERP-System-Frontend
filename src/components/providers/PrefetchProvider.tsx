@@ -30,6 +30,10 @@ export default function PrefetchProvider({ children }: { children: React.ReactNo
     const done = sessionStorage.getItem(PREFETCH_KEY);
     if (done) return;
 
+    // Build current month's first day for KPI prefetch — matches KpiTable's default
+    const now = new Date();
+    const currentMonthStart = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-01`;
+
     // Query keys mirror LIST_DEFAULTS — every key includes page/limit/sort
     // so the first list-page render hits the SAME cache entry.
     const prefetches = [
@@ -61,6 +65,21 @@ export default function PrefetchProvider({ children }: { children: React.ReactNo
       qc.prefetchQuery({
         queryKey: ["categories", { page: 1, limit: 20, sort: "-createdAt" }],
         queryFn:  () => api.get("/categories", { params: { page: 1, limit: 20, sort: "-createdAt" } }),
+      }),
+      // KPIs — current month, matches KpiTable's default params exactly
+      qc.prefetchQuery({
+        queryKey: ["kpis", { period: "MONTHLY", periodStart: currentMonthStart }],
+        queryFn:  () => api.get("/kpis", { params: { period: "MONTHLY", periodStart: currentMonthStart } }),
+      }),
+      // Dashboard summary
+      qc.prefetchQuery({
+        queryKey: ["dashboard-summary"],
+        queryFn:  () => api.get("/dashboard/summary"),
+      }),
+      // Team performance
+      qc.prefetchQuery({
+        queryKey: ["dashboard-team-performance"],
+        queryFn:  () => api.get("/dashboard/team-performance"),
       }),
     ];
 

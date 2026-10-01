@@ -11,6 +11,7 @@ export function useAuditLogs(params: Record<string, unknown> = {}) {
     queryKey: ["audit-logs", params],
     queryFn: async () => {
       const res = await api.get("/audit-logs", { params }) as unknown;
+      if (res && typeof res === "object" && "data" in (res as object) && "meta" in (res as object)) return res as AuditLogsResponse;
       if (Array.isArray(res)) return { data: res as AuditLog[], meta: { page: 1, limit: 20, total: (res as AuditLog[]).length, totalPages: 1 } };
       return res as AuditLogsResponse;
     },

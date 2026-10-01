@@ -14,6 +14,10 @@ export function useQuotations(params: Record<string, unknown>) {
     queryKey: ["quotations", params],
     queryFn: async () => {
       const res = await api.get("/quotations", { params }) as unknown;
+      // Interceptor returns { data: Quotation[], meta } for paginated responses
+      if (res && typeof res === "object" && "data" in (res as object) && "meta" in (res as object)) {
+        return res as QuotationsResponse;
+      }
       if (Array.isArray(res)) return { data: res as Quotation[], meta: { page: 1, limit: 20, total: (res as Quotation[]).length, totalPages: 1 } };
       return res as QuotationsResponse;
     },

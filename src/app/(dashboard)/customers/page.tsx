@@ -1,4 +1,4 @@
-﻿import { Suspense } from "react";
+import { Suspense } from "react";
 import CustomerList from "@/components/features/customers/CustomerList";
 import SkeletonList from "@/components/shared/SkeletonList";
 

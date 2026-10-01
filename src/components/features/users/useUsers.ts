@@ -24,6 +24,7 @@ export function useUsers(params: Record<string, unknown> = {}) {
     queryKey: ["users", params],
     queryFn: async () => {
       const res = await api.get("/users", { params }) as unknown;
+      if (res && typeof res === "object" && "data" in (res as object) && "meta" in (res as object)) return res as UsersResponse;
       if (Array.isArray(res)) return { data: res as UserRow[], meta: { page: 1, limit: 20, total: (res as UserRow[]).length, totalPages: 1 } };
       return res as UsersResponse;
     },

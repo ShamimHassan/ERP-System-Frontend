@@ -52,8 +52,14 @@ export default function OpportunityForm({ opportunity, prefillLeadId, prefillCus
 
   const { data: usersData } = useQuery<{ data: { id: string; name: string; role: string }[] }>({
     queryKey: ["users-list"],
-    queryFn: () => api.get("/users", { params: { limit: 100 } }) as unknown as Promise<{ data: { id: string; name: string; role: string }[] }>,
-    enabled: !isMarketing,
+    queryFn: async () => {
+      const res = await api.get("/users", { params: { limit: 100 } }) as unknown;
+      if (res && typeof res === "object" && "data" in (res as object)) return res as { data: { id: string; name: string; role: string }[] };
+      if (Array.isArray(res)) return { data: res as { id: string; name: string; role: string }[] };
+      return res as { data: { id: string; name: string; role: string }[] };
+    },
+    enabled: !isMarketing && !!user,
+    staleTime: 5 * 60_000,
   });
   const marketingUsers = usersData?.data?.filter((u) => u.role === "MARKETING") ?? [];
   const managerUsers   = usersData?.data?.filter((u) => u.role === "MANAGER")   ?? [];

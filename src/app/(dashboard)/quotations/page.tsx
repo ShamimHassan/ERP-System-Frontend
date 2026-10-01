@@ -1,4 +1,4 @@
-﻿import { Suspense } from "react";
+import { Suspense } from "react";
 import QuotationList from "@/components/features/quotations/QuotationList";
 import SkeletonList from "@/components/shared/SkeletonList";
 export default function QuotationsPage() {

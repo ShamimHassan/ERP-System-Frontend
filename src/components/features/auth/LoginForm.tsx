@@ -83,7 +83,10 @@ export default function LoginForm() {
       const data = await api.post("/auth/login", values) as unknown as LoginResponse;
       setLogin(data.user, data.accessToken, data.refreshToken);
       toast.success(`Welcome back, ${data.user.name}!`);
-      router.push("/dashboard");
+      // Navigate after a short tick so the browser has time to detect
+      // the successful form submission and show the "Save password?" prompt
+      // on this page (not on the next page).
+      setTimeout(() => router.push("/dashboard"), 100);
     } catch (err: unknown) {
       const error = err as { message?: string; errorData?: { code?: string } };
       const code = error?.errorData?.code;
@@ -129,7 +132,14 @@ export default function LoginForm() {
 
       {/* ── Form ── */}
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5" noValidate>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-5"
+          noValidate
+          id="login-form"
+          action="#"
+          method="post"
+        >
 
           {/* Email */}
           <FormField
@@ -143,9 +153,11 @@ export default function LoginForm() {
                 <FormControl>
                   <Input
                     {...field}
+                    id="email"
+                    name="email"
                     type="email"
                     placeholder="you@company.com"
-                    autoComplete="email"
+                    autoComplete="username email"
                     autoFocus
                     disabled={isSubmitting}
                     className="h-12 text-base"
@@ -169,6 +181,8 @@ export default function LoginForm() {
                   <div className="relative">
                     <Input
                       {...field}
+                      id="password"
+                      name="password"
                       type={showPassword ? "text" : "password"}
                       placeholder="••••••••"
                       autoComplete="current-password"

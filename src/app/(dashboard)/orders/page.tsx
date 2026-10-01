@@ -1,4 +1,4 @@
-﻿import { Suspense } from "react";
+import { Suspense } from "react";
 import OrderList from "@/components/features/orders/OrderList";
 import SkeletonList from "@/components/shared/SkeletonList";
 export default function OrdersPage() {
